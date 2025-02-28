@@ -1,45 +1,54 @@
 import pygame
 from pygame.locals import *
 
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
 
-YELLOW = (255, 255, 0)
-CYAN = (0, 255, 255)
-MAGENTA = (255, 0, 255)
-GRAY = (127, 127, 127)
-WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GRAY = (150, 150, 150)
 
 pygame.init()
-screen = pygame.display.set_mode((640,240))
 
-key_dict = {K_k:BLACK, K_r:RED, K_g:GREEN, K_b:BLUE,
-    K_y:YELLOW, K_c:CYAN, K_m:MAGENTA, K_w:WHITE}
+WIDTH = 800
+HEIGHT = 500
+
+
+
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
+
+rect_1 = pygame.Rect(0,400,100,100)
+
+
+clock = pygame.time.Clock()
 
 
 
 
 running = True
-background = GRAY
-while running:
-    for event in pygame.event.get():
 
+
+while running:  
+    clock.tick(60)
+    screen.fill(GRAY)
+
+    pygame.draw.rect(screen,RED,rect_1)
+
+
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
 
         if event.type == KEYDOWN:
-            if event.key in key_dict:
-                background = key_dict[event.key]
+            if event.key == K_RIGHT:
+                rect_1.left += 5
+            if event.key == K_LEFT:
+                rect_1.right -= 5
+            if event.key == K_UP:
+                rect_1.top -= 5
+            if event.key == K_DOWN:
+                rect_1.bottom += 5
 
-
-
-
-    screen.fill(background)
+    pygame.display.flip()
     pygame.display.update()
-
-
 
 
 pygame.quit()
