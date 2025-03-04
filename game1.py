@@ -1,117 +1,64 @@
 import pygame
 from pygame.locals import *
+import random
 
 
-RED = (255, 0, 0)
-GRAY = (150, 150, 150)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-
-
+WIDTH = 500
+HEIGHT = 500
+TILE = 25
 pygame.init()
-WIDTH = 640
-HEIGHT = 320
-screen = pygame.display.set_mode((WIDTH,HEIGHT))
+screen = pygame.display.set_mode((WIDTH,HEIGHT),0,32)
+
+
 clock = pygame.time.Clock()
 
 
-img1 = pygame.image.load('images/path1.png')
 
-
-rect_2 = img1.get_rect()
-
-
-
-
-
-tile_size= 64
-game_map = [[0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [1,1,1,1,1,1,1,1,1,1]]        
-tile_list = []
-
-
-
-
-
-
-playercharacter = pygame.image.load('images/cube1.png')
-playercharacterrect = playercharacter.get_rect()
-
-
-playerright = False
-playerleft = False
-playerup = False
-playerdown = False
-
-
+snake = pygame.rect.Rect([100,100,TILE-2,TILE-2])
+segments = [snake.copy()]
+length = 1
+snake_dir = (0,0)
 
 
 running = True
-
 while running:  
+
     clock.tick(60)
-    screen.fill(GRAY)
 
-    pygame.draw.rect(screen,RED,playercharacterrect)
-
+    screen.fill('black')
     
-    tile_list = []
-    y = 0
-    for row in game_map:
-        x = 0
-        for segment in row:
-            if segment == 1:
-              screen.blit(img1,(x*64,y*64))
-            x += 1
-        y += 1
-
-
+    for segment in segments:
+        pygame.draw.rect(screen,'green',segment)
+    
 
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             running = False
 
+ 
         if event.type == KEYDOWN:
+            if event.key == K_UP:
+                snake_dir = (0,-TILE)
+            if event.key == K_DOWN:
+                snake_dir = (0,TILE)
+            if event.key == K_LEFT:
+                snake_dir = (-TILE,0)
             if event.key == K_RIGHT:
-                playerright  = True
-
-
-
-
-
-
-
-
-
-
-
-        if event.type == KEYUP:
-            if event.key == K_RIGHT:
-                playerright = False
-
-
-
-
-    if playerright == True:
-        playercharacterrect.right += 1
-
-
-
-
-
+                snake_dir = (TILE,0)    
 
     
-    screen.blit(playercharacter,(playercharacterrect))
+
+  
+
+    snake.move_ip(snake_dir)
+    segments.append(snake.copy())
+    segments = segments[-length:]
+    
     pygame.display.flip()
     pygame.display.update()
 
 
 pygame.quit()
-
-
 
   
